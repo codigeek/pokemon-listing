@@ -4,7 +4,7 @@ import { API_CONFIG } from 'constants.js';
 export const getAPI = async (data, dispatch, modalShowingGeneralModal, modalChangeNewMessage) => {
     try {
         return axios.get(
-            `${API_CONFIG.base_url}${data.url}`,
+            `${process.env.REACT_APP_API_URL}${data.url}`,
             {
                 params: data.data
             }
