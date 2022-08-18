@@ -64,7 +64,7 @@ const Nav = () => {
         {/* <NavBusinessSwitcher /> */}
         {/* <NavIconMenu /> */}
         <MainMenu />
-        <NavUserMenu />
+        {/* <NavUserMenu /> */}
         <NavMobileButtons />
       </div>
     </div>

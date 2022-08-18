@@ -65,7 +65,7 @@ const Register = () => {
         </div>
         <div className="mb-5">
           <h2 className="cta-1 mb-0 text-primary">Bienvenido,</h2>
-          <h2 className="cta-1 text-primary">crea tu perfil en Reus!</h2>
+          <h2 className="cta-1 text-primary">crea tu perfil en Pokemon!</h2>
         </div>
         <div className="mb-5">
           <p className="h6">Completa el formulario para crear tu perfil.</p>

@@ -7,8 +7,8 @@ export const USE_MULTI_LANGUAGE = false;
 
 // For detailed information: https://github.com/nfl/react-helmet#reference-guide
 export const REACT_HELMET_PROPS = {
-  defaultTitle: 'reus',
-  titleTemplate: 'reus',
+  defaultTitle: 'Pokemon',
+  titleTemplate: 'Pokemon',
 };
 
 export const DEFAULT_PATHS = {

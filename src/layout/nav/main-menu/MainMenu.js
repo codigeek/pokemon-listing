@@ -137,9 +137,6 @@ const MainMenu = () => {
           }}
           className="menu-container flex-grow-1"
         >
-          <div className="nav-legend-text text-center mt-3 mb-3">
-            ¿Dónde quieres hacer tu prox reu?
-          </div>
           <ul id="menu" className={classNames('menu show')}>
             <MainMenuItems menuItems={menuItemsMemo} menuPlacement={placementStatus.view} />
           </ul>
