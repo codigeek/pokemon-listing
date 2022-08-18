@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import classNames from 'classnames';
 import { Col, Dropdown, Row } from 'react-bootstrap';
 import { MENU_PLACEMENT } from 'constants.js';

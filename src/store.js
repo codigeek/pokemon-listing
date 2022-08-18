@@ -15,8 +15,6 @@ import menuReducer from 'layout/nav/main-menu/menuSlice';
 import notificationReducer from 'layout/nav/notifications/notificationSlice';
 import scrollspyReducer from 'components/scrollspy/scrollspySlice';
 
-import calendarReducer from 'views/sales/calendarSlice';
-
 import { StuffysApi } from 'services/post';
 
 // import persist key
@@ -39,9 +37,6 @@ const persistedReducer = persistReducer(
     menu: menuReducer,
     notification: notificationReducer,
     scrollspy: scrollspyReducer,
-
-    calendar: calendarReducer,
-
     [StuffysApi.reducerPath] : StuffysApi.reducer
   })
 );

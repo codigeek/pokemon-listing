@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -9,23 +8,7 @@ import CsLineIcons from 'cs-line-icons/CsLineIcons';
 import HtmlHead from 'components/html-head/HtmlHead';
 import GeneralModal from 'components/modals/GeneralModal';
 
-import axios from 'axios';
-import { API_CONFIG } from 'constants.js';
-import { DEFAULT_USER } from 'config.js';
-
-import {
-  setCurrentUser,
-  setUserType,
-  setCurrentBrand,
-  setCurrentBranch
-} from 'auth/authSlice';
-
-import { analyzePermissions, getRoles } from './functions/loginFunctions';
-
 const Login = () => {
-
-  const dispatch = useDispatch();
-  const history = useHistory();
 
   const title = 'Iniciar sesión';
   const description = 'Página de iniciar sesión';
@@ -40,33 +23,8 @@ const Login = () => {
   const initialValues = { email: '', password: '' };
 
   const onSubmit = async (values) => {
-    dispatch(setCurrentUser(DEFAULT_USER));
-    history.push("/catalogos");
-    // try {
-    //   axios.post(
-    //     `${API_CONFIG.base_url}authentication`,
-    //     values
-    //   )
-    //     .then(res => {
-    //       if (res.status === 200) {
-    //         const userLogin = res?.data?.data;
-    //         userLogin.role = getRoles(userLogin);
-    //         setShowGeneralModal(true);
-    //         setMessageGeneralModal(res?.data?.message);
-    //         dispatch(setCurrentUser(userLogin));
-    //         dispatch(setUserType(userLogin?.user_type_id));
-    //         dispatch(setCurrentBrand(res?.data?.brand));
-    //         dispatch(setCurrentBranch(res?.data?.branch));
-    //         analyzePermissions(userLogin, history);
-    //       } else {
-    //         setShowGeneralModal(true);
-    //         setMessageGeneralModal(res?.data?.message);
-    //       }
-    //     })
-    // } catch (err) {
-    //   setShowGeneralModal(true);
-    //   setMessageGeneralModal("Error inesperado al intentar iniciar sesión, por favor intenta más tarde");
-    // }
+    console.log(values);
+    setMessageGeneralModal("Test");
   };
 
   const formik = useFormik({ initialValues, validationSchema, onSubmit });

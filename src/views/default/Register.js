@@ -39,7 +39,6 @@ const Register = () => {
   const initialValues = { name: '', email: '', password: '', terms: false };
 
   const onSubmit = async (values) => {
-    console.log(values, process.env.REACT_APP_API_URL);
     const response = await axios.post(`${API_CONFIG.reus_api}/authentication/signup`, values).catch((error) => {
       setShowGeneralModal(true);
       setTitleGeneralModal("Alerta");

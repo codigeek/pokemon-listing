@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { MENU_PLACEMENT } from 'constants.js';
@@ -10,7 +10,6 @@ const MENU_NAME = 'NavBusinessSwitcher';
 const NavBusinessSwitcher = () => {
 
   const dispatch = useDispatch();
-  const { currentBrand, currentBranch, currentUser } = useSelector((state) => state.auth);
 
   const {
     behaviourStatus: { behaviourHtmlData },
@@ -21,10 +20,6 @@ const NavBusinessSwitcher = () => {
 
   const { color } = useSelector((state) => state.settings);
   const { showingNavMenu } = useSelector((state) => state.layout);
-
-  const onSelectBusiness = (record) => {
-
-  };
 
   const onToggle = (status, event) => {
     if (event && event.stopPropagation) event.stopPropagation();

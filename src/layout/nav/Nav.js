@@ -3,21 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 import { MENU_BEHAVIOUR, MENU_PLACEMENT } from 'constants.js';
-import NavUserMenu from './NavUserMenu';
-import NavIconMenu from './NavIconMenu';
 import MainMenu from './main-menu/MainMenu';
 import NavLogo from './NavLogo';
 import NavMobileButtons from './NavMobileButtons';
 import { menuChangeAttrMenuAnimate, menuChangeCollapseAll } from './main-menu/menuSlice';
-// import NavLanguageSwitcher from './NavLanguageSwitcher';
-import NavBusinessSwitcher from './NavBusinessSwitcher';
 
 const DELAY = 80;
 
 const Nav = () => {
   const dispatch = useDispatch();
   const { navClasses, placementStatus, behaviourStatus, attrMobile, menuPadding } = useSelector((state) => state.menu);
-  const { currentUser } = useSelector((state) => state.auth);
   const mouseActionTimer = useRef(null);
 
   // Vertical menu semihidden state showing
@@ -61,10 +56,7 @@ const Nav = () => {
         style={placementStatus.placementHtmlData === MENU_PLACEMENT.Horizontal && menuPadding ? { paddingRight: menuPadding } : {}}
       >
         <NavLogo />
-        {/* <NavBusinessSwitcher /> */}
-        {/* <NavIconMenu /> */}
         <MainMenu />
-        {/* <NavUserMenu /> */}
         <NavMobileButtons />
       </div>
     </div>

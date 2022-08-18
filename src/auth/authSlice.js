@@ -64,6 +64,7 @@ const authSlice = createSlice({
       state.userType.isBranchAdmin = false;
       state.userType.isSales = false;
       state.userType.isClient = false;
+      console.log(action);
     }
   },
 });
