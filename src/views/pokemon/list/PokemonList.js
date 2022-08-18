@@ -14,6 +14,8 @@ const CustomersList = () => {
   const [pokemons, setPokemons] = useState([]);
   const [pokemonsQuantity, setPokemonsQuantity] = useState(50);
   const [currentPage, setCurrentPage] = useState(1);
+  const [avgHeight, setAvgHeight] = useState(0);
+  const [avgWeight, setAvgWeight] = useState(0);
   const [pages, setPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,6 +48,8 @@ const CustomersList = () => {
       setIsLoading(false);
       console.log("data: ", response?.data);
       console.log("Pokemons: ", response?.data?.results);
+      setAvgHeight(response?.data?.avgHeight);
+      setAvgWeight(response?.data?.avgWeight);
       setPokemons(response?.data?.results);
       setPages(Math.ceil(response?.data?.count / pokemonsQuantity));
     }
@@ -69,8 +73,17 @@ const CustomersList = () => {
       </div>
 
       <Row className="mb-3">
-        <Col md="7" lg="12" xxl="12" className="mb-1 text-end">
-
+        <Col md="4" lg="4" xxl="4" className="mb-1 text-end">
+          <div>
+            Average Height: {avgHeight}
+          </div>
+        </Col>
+        <Col md="4" lg="4" xxl="4" className="mb-1 text-end">
+          <div>
+            Average Weight: {avgWeight}
+          </div>
+        </Col>
+        <Col md="4" lg="4" xxl="4" className="mb-1 text-end">
           {/* Length Start */}
           <Dropdown align={{ xs: 'end' }} className="d-inline-block ms-1">
             <OverlayTrigger delay={{ show: 1000, hide: 0 }} placement="top" overlay={<Tooltip id="tooltip-top">Item Count</Tooltip>}>
