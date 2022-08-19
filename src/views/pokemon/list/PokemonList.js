@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Row, Col, Button, Dropdown, Form, Card, Pagination, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import HtmlHead from 'components/html-head/HtmlHead';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
@@ -8,7 +9,14 @@ import Loading from 'components/loading/Loading';
 import { toast } from 'react-toastify';
 import { GeneralNotification } from 'components/notification/GeneralNotification';
 
+import {
+  setPokemon
+} from 'auth/authSlice';
+
 const CustomersList = () => {
+
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const title = 'Pokemon List';
   const description = 'Pokemon data';
@@ -20,6 +28,13 @@ const CustomersList = () => {
   const [avgWeight, setAvgWeight] = useState(0);
   const [pages, setPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
+  const goToDetail = async (pokemon) => {
+    dispatch(setPokemon(pokemon));
+    history.push({
+      pathname: '/pokemon-detail'
+    });
+  }
 
   const markFavorite = async (pokemon, index) => {
     const response = await postAPI({
@@ -39,7 +54,6 @@ const CustomersList = () => {
         pokemonsData[index].favorite = true;
       }
       setPokemons(pokemonsData);
-      console.log("Set pokemon favorite toggle", pokemon);
     }
     toast(
       <GeneralNotification
@@ -68,7 +82,6 @@ const CustomersList = () => {
           page: currentPage
         }
       });
-      console.log("Pokemons: ", response?.data);
       setIsLoading(false);
       setPokemons(response?.data?.pokemons);
       setAvgHeight(response?.data?.avgHeight);
@@ -165,9 +178,9 @@ const CustomersList = () => {
                       </Col>
                       <Col xs="11" lg="2" className="d-flex flex-column justify-content-center mb-2 mb-lg-0 order-1 order-lg-2 h-lg-100 position-relative">
                         <div className="text-muted text-small d-lg-none">Name</div>
-                        <NavLink to="/customers/detail" className="text-truncate h-100 d-flex align-items-center">
+                        <div onClick={() => goToDetail(pokemon)} className="text-truncate h-100 d-flex align-items-center cursor">
                           {pokemon?.name}
-                        </NavLink>
+                        </div>
                       </Col>
                       <Col xs="6" lg="2" className="d-flex flex-column justify-content-center mb-2 mb-lg-0 order-3 order-lg-3">
                         <div className="text-muted text-small d-lg-none">WEIGHT</div>
@@ -192,11 +205,9 @@ const CustomersList = () => {
                       </Col>
                       <Col xs="6" lg="1" className="d-flex flex-column justify-content-center align-items-center mb-2 mb-lg-0 order-5 order-lg-6">
                         <div className="text-muted text-small d-lg-none">ACTIONS</div>
-                        <NavLink to="/customers/detail" className="text-truncate h-100 d-flex align-items-center body-link">
-                          <Button variant="outline-primary" className="btn-icon btn-icon-start ms-0 ms-sm-1 w-100 w-md-auto">
-                            <span>See details</span>
-                          </Button>
-                        </NavLink>
+                        <Button onClick={() => goToDetail(pokemon)} variant="outline-primary" className="btn-icon btn-icon-start ms-0 ms-sm-1 w-100 w-md-auto">
+                          <span>See details</span>
+                        </Button>
                       </Col>
                     </Row>
                   </Card.Body>

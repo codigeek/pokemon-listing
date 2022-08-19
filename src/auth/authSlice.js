@@ -12,13 +12,17 @@ const initialState = {
   currentUser: {},
   currentBrand: undefined,
   currentBranch: undefined,
-  routes: []
+  routes: [],
+  pokemon: undefined
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setPokemon(state, action) {
+      state.pokemon = action.payload;
+    },
     setCurrentUser(state, action) {
       state.currentUser = action.payload;
       state.isLogin = true;
@@ -69,7 +73,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCurrentUser, setLogin, setCurrentBrand, setCurrentBranch, setUserType, resetUserType } = authSlice.actions;
+export const { setCurrentUser, setPokemon, setLogin, setCurrentBrand, setCurrentBranch, setUserType, resetUserType } = authSlice.actions;
 
 const authReducer = authSlice.reducer;
 

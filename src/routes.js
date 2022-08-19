@@ -22,7 +22,13 @@ const routesAndMenuItems = {
       path: `${appRoot}/pokemon`,
       component: pokemon.list,
       label: 'Pokemón',
-      icon: 'home-garage'
+      icon: 'sun'
+    },
+    {
+      path: `${appRoot}/pokemon-detail`,
+      component: pokemon.detail,
+      label: 'Pokemón detail',
+      hideInMenu: true,
     }
   ],
   sidebarItems: [],
