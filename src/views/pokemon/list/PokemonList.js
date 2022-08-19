@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Row, Col, Button, Dropdown, Form, Card, Pagination, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import HtmlHead from 'components/html-head/HtmlHead';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
-import { getAPI } from 'data.service';
+import { getAPI, postAPI } from 'data.service';
 import Loading from 'components/loading/Loading';
+import { toast } from 'react-toastify';
+import { GeneralNotification } from 'components/notification/GeneralNotification';
+
+import {
+  setPokemon
+} from 'auth/authSlice';
 
 const CustomersList = () => {
+
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const title = 'Pokemon List';
   const description = 'Pokemon data';
@@ -14,17 +24,50 @@ const CustomersList = () => {
   const [pokemons, setPokemons] = useState([]);
   const [pokemonsQuantity, setPokemonsQuantity] = useState(50);
   const [currentPage, setCurrentPage] = useState(1);
+  const [avgHeight, setAvgHeight] = useState(0);
+  const [avgWeight, setAvgWeight] = useState(0);
   const [pages, setPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [selectedItems, setSelectedItems] = useState([]);
-  const checkItem = (item) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter((x) => x !== item));
-    } else {
-      setSelectedItems([...selectedItems, item]);
+  const goToDetail = async (pokemon) => {
+    dispatch(setPokemon(pokemon));
+    history.push({
+      pathname: '/pokemon-detail'
+    });
+  }
+
+  const markFavorite = async (pokemon, index) => {
+    const response = await postAPI({
+      url: '/pokemon',
+      data: {
+        id: pokemon?.detail?.id,
+        name: pokemon?.name,
+        url: pokemon?.url,
+        favorite: true
+      }
+    });
+    console.log("response favorites", response);
+    if (response.status === 200) {
+      const pokemonsData = [...pokemons];
+      if (pokemonsData[index].favorite) {
+        pokemonsData[index].favorite = false;
+      } else {
+        pokemonsData[index].favorite = true;
+      }
+      setPokemons(pokemonsData);
     }
-  };
+    toast(
+      <GeneralNotification
+        icon="check"
+        title="Alerta"
+        description={response?.data?.message}
+        count={response?.data?.analytics?.count}
+        height={response?.data?.analytics?.avgHeightFavorites}
+        weight={response?.data?.analytics?.avgWeightFavorites}
+      />,
+      { className: response.status === 200 ? 'success' : 'error' }
+    );
+  }
 
   useEffect(() => {
     setCurrentPage(1);
@@ -44,9 +87,9 @@ const CustomersList = () => {
         }
       });
       setIsLoading(false);
-      console.log("data: ", response?.data);
-      console.log("Pokemons: ", response?.data?.results);
-      setPokemons(response?.data?.results);
+      setPokemons(response?.data?.pokemons);
+      setAvgHeight(response?.data?.avgHeight);
+      setAvgWeight(response?.data?.avgWeight);
       setPages(Math.ceil(response?.data?.count / pokemonsQuantity));
     }
     loadPokemon();
@@ -69,8 +112,17 @@ const CustomersList = () => {
       </div>
 
       <Row className="mb-3">
-        <Col md="7" lg="12" xxl="12" className="mb-1 text-end">
-
+        <Col md="4" lg="4" xxl="4" className="mb-1 text-end">
+          <div>
+            Average Weight: {avgWeight}
+          </div>
+        </Col>
+        <Col md="4" lg="4" xxl="4" className="mb-1 text-end">
+          <div>
+            Average Height: {avgHeight}
+          </div>
+        </Col>
+        <Col md="4" lg="4" xxl="4" className="mb-1 text-end">
           {/* Length Start */}
           <Dropdown align={{ xs: 'end' }} className="d-inline-block ms-1">
             <OverlayTrigger delay={{ show: 1000, hide: 0 }} placement="top" overlay={<Tooltip id="tooltip-top">Item Count</Tooltip>}>
@@ -80,7 +132,6 @@ const CustomersList = () => {
             </OverlayTrigger>
             <Dropdown.Menu className="shadow dropdown-menu-end">
               <Dropdown.Item onClick={() => setPokemonsQuantity(50)}>50 Items</Dropdown.Item>
-              <Dropdown.Item onClick={() => setPokemonsQuantity(100)}>100 Items</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           {/* Length End */}
@@ -120,17 +171,20 @@ const CustomersList = () => {
           <div>
             {
               pokemons.map((pokemon, i) => {
-                return (<Card key={i} className={`mb-2 ${selectedItems.includes(1) && 'selected'}`}>
+                return (<Card key={i} className={`mb-2 ${pokemon.favorite && 'selected'}`}>
                   <Card.Body className="pt-0 pb-0 sh-30 sh-lg-8">
-                    <Row className="g-0 h-100 align-content-center" onClick={() => checkItem(1)}>
+                    <Row className="g-0 h-100 align-content-center">
                       <Col xs="6" lg="2" className="d-flex flex-column justify-content-center mb-2 mb-lg-0 order-3 order-lg-1">
-                        <img className="card-img card-img-horizontal sw-8 h-100" src={pokemon?.detail?.sprites?.front_default} alt="" />
+                        {
+                          pokemon?.detail?.sprites?.front_default &&
+                          <img className="card-img card-img-horizontal sw-8 h-100" src={pokemon?.detail?.sprites?.front_default} alt="" />
+                        }
                       </Col>
                       <Col xs="11" lg="2" className="d-flex flex-column justify-content-center mb-2 mb-lg-0 order-1 order-lg-2 h-lg-100 position-relative">
                         <div className="text-muted text-small d-lg-none">Name</div>
-                        <NavLink to="/customers/detail" className="text-truncate h-100 d-flex align-items-center">
+                        <div onClick={() => goToDetail(pokemon)} className="text-truncate h-100 d-flex align-items-center cursor">
                           {pokemon?.name}
-                        </NavLink>
+                        </div>
                       </Col>
                       <Col xs="6" lg="2" className="d-flex flex-column justify-content-center mb-2 mb-lg-0 order-3 order-lg-3">
                         <div className="text-muted text-small d-lg-none">WEIGHT</div>
@@ -151,15 +205,13 @@ const CustomersList = () => {
                         </div>
                       </Col>
                       <Col xs="1" lg="1" className="d-flex flex-column justify-content-center align-items-center mb-2 mb-md-0 order-2 order-lg-5 text-end order-md-last">
-                        <Form.Check className="form-check mt-2 ps-5 ps-md-2" type="checkbox" checked={selectedItems.includes(1)} onChange={() => { }} />
+                        <Form.Check className="form-check mt-2 ps-5 ps-md-2" type="checkbox" checked={pokemon.favorite ? pokemon.favorite : false} onChange={() => markFavorite(pokemon, i)} />
                       </Col>
                       <Col xs="6" lg="1" className="d-flex flex-column justify-content-center align-items-center mb-2 mb-lg-0 order-5 order-lg-6">
                         <div className="text-muted text-small d-lg-none">ACTIONS</div>
-                        <NavLink to="/customers/detail" className="text-truncate h-100 d-flex align-items-center body-link">
-                          <Button variant="outline-primary" className="btn-icon btn-icon-start ms-0 ms-sm-1 w-100 w-md-auto">
-                            <span>See details</span>
-                          </Button>
-                        </NavLink>
+                        <Button onClick={() => goToDetail(pokemon)} variant="outline-primary" className="btn-icon btn-icon-start ms-0 ms-sm-1 w-100 w-md-auto">
+                          <span>See details</span>
+                        </Button>
                       </Col>
                     </Row>
                   </Card.Body>

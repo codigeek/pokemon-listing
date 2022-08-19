@@ -27,7 +27,7 @@ export const getAPI = async (data, dispatch, modalShowingGeneralModal, modalChan
 export const postAPI = async (data, dispatch, modalShowingGeneralModal, modalChangeNewMessage) => {
     try {
         return axios.post(
-            `${API_CONFIG.base_url}${data.url}`,
+            `${process.env.REACT_APP_API_URL}${data.url}`,
             {
                 params: data.data,
                 info: data.info
