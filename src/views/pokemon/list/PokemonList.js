@@ -46,6 +46,7 @@ const CustomersList = () => {
         favorite: true
       }
     });
+    console.log("response favorites", response);
     if (response.status === 200) {
       const pokemonsData = [...pokemons];
       if (pokemonsData[index].favorite) {
@@ -59,7 +60,10 @@ const CustomersList = () => {
       <GeneralNotification
         icon="check"
         title="Alerta"
-        description={response.data}
+        description={response?.data?.message}
+        count={response?.data?.analytics?.count}
+        height={response?.data?.analytics?.avgHeightFavorites}
+        weight={response?.data?.analytics?.avgWeightFavorites}
       />,
       { className: response.status === 200 ? 'success' : 'error' }
     );
